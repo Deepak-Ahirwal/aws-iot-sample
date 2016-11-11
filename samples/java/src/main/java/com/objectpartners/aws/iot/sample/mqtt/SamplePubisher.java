@@ -29,7 +29,8 @@ public class SamplePubisher implements Runnable {
 		try {
 			int speed = random.nextInt(100);
 			if (speed >= minSpeed) {
-				awsIotMqttClient.publish("speed/" + clientId, AWSIotQos.QOS1, "{speed: \"" + speed + "\"}");
+				String payload = "{\"speed\": " + speed + "}";
+				awsIotMqttClient.publish("speed/" + clientId, AWSIotQos.QOS1, payload);
 				log.debug("Successfully published device speed: {} minSpeed: {}", speed, minSpeed);
 			} else {
 				log.debug("Skipping publish. Device speed: {} < minSpeed: {}", speed, minSpeed);
