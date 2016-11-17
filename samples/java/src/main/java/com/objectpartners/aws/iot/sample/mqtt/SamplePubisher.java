@@ -14,6 +14,7 @@ public class SamplePubisher implements Runnable {
 	private static final Logger log = LoggerFactory.getLogger(SamplePubisher.class);
 
 	private final String clientId;
+	private final String speedTopic;
 	private final AWSIotMqttClient awsIotMqttClient;
 	private final Random random = new Random();
 	private final int minSpeed;
@@ -22,6 +23,7 @@ public class SamplePubisher implements Runnable {
 		this.clientId = clientId;
 		this.awsIotMqttClient = awsIotMqttClient;
 		this.minSpeed = minSpeed;
+		this.speedTopic = "speed/" + clientId;
 	}
 
 	@Override public void run() {
@@ -30,7 +32,7 @@ public class SamplePubisher implements Runnable {
 			int speed = random.nextInt(100);
 			if (speed >= minSpeed) {
 				String payload = "{\"speed\": " + speed + "}";
-				awsIotMqttClient.publish("speed/" + clientId, AWSIotQos.QOS1, payload);
+				awsIotMqttClient.publish(speedTopic, AWSIotQos.QOS1, payload);
 				log.debug("Successfully published device speed: {} minSpeed: {}", speed, minSpeed);
 			} else {
 				log.debug("Skipping publish. Device speed: {} < minSpeed: {}", speed, minSpeed);
